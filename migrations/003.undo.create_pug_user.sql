@@ -1,0 +1,4 @@
+ALTER TABLE pug_event
+    DROP COLUMN IF EXISTS host_id;
+
+DROP TABLE IF EXISTS pug_user;

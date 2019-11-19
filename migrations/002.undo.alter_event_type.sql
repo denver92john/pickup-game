@@ -1,0 +1,3 @@
+ALTER TABLE pug_event DROP COLUMN IF EXISTS sport;
+
+DROP TYPE IF EXISTS sport_type;
