@@ -23,7 +23,8 @@ const EventService = {
                 'event.host_id',
                 'usr.id'
             )
-            .groupBy('event.id', 'usr.id')
+            //.groupBy('event.id', 'usr.id')
+            .orderBy('event.id', 'usr.id')
     },
 
     getById(db, id) {
@@ -32,8 +33,35 @@ const EventService = {
             .first()
     },
 
+    insertEvent(db, newEvent) {
+        return db
+            .insert(newEvent)
+            .into('pug_event')
+            .returning('*')
+            .then(rows => {
+                return rows[0]
+            })
+    },
+
+    serializeEvents(events) {
+        const {host} = events;
+        return {
+            id: events.id,
+            title: events.title,
+            description: events.description,
+            datetime: events.datetime,
+            max_players: events.max_players,
+            sport: events.sport,
+            host: {
+                id: host.id,
+                username: host.username,
+                first_name: host.first_name,
+                last_name: host.last_name
+            }
+        }
+    },
+
     serializeEvent(event) {
-        const {host} = event;
         return {
             id: event.id,
             title: event.title,
@@ -41,12 +69,7 @@ const EventService = {
             datetime: event.datetime,
             max_players: event.max_players,
             sport: event.sport,
-            host: {
-                id: host.id,
-                username: host.username,
-                first_name: host.first_name,
-                last_name: host.last_name
-            }
+            host_id: event.host_id
         }
     }
 }
