@@ -43,7 +43,7 @@ eventRouter
 
 eventRouter
     .route('/:event_id')
-    .get((req, res, next) => {
+    .all((req, res, next) => {
         EventService.getById(
             req.app.get('db'),
             req.params.event_id
@@ -54,9 +54,21 @@ eventRouter
                         error: {message: `Event doesn't exist`}
                     })
                 }
-                //console.log(event)
-                res.json(EventService.serializeEvent(event))
+                res.event = event
                 next()
+            })
+            .catch(next)
+    })
+    .get((req, res, next) => {
+        res.json(EventService.serializeEvents(res.event))
+    })
+    .delete((req, res, next) => {
+        EventService.deleteEvent(
+            req.app.get('db'),
+            req.params.event_id
+        )
+            .then(() => {
+                res.status(204).end()
             })
             .catch(next)
     })

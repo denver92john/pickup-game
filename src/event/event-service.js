@@ -43,6 +43,12 @@ const EventService = {
             })
     },
 
+    deleteEvent(db, id) {
+        return db('pug_event')
+            .where({id})
+            .delete()
+    },
+
     serializeEvents(events) {
         const {host} = events;
         return {
