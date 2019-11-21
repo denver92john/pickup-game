@@ -18,3 +18,11 @@ VALUES
     ('Dunk Fest', 'The premier pickup basketball game of the summer', 'November 15 16:20:55 2019 GMT', 8, 'basketball', 3);
 
 COMMIT;
+
+-- Add colums (managers) to tables (departments)
+/*
+UPDATE department SET manager = 7 WHERE id = 1;
+UPDATE department SET manager = 3 WHERE id = 2;
+UPDATE department SET manager = 6 WHERE id = 3;
+UPDATE department SET manager = 5 WHERE id = 4;
+*/
