@@ -33,6 +33,8 @@ const EventService = {
             .first()
     },
 
+    //getPlayers(db, id) {},
+
     insertEvent(db, newEvent) {
         return db
             .insert(newEvent)

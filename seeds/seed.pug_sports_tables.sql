@@ -1,9 +1,16 @@
 BEGIN;
 
 TRUNCATE
+    user_event,
     pug_user,
     pug_event
     RESTART IDENTITY CASCADE;
+
+INSERT INTO pug_event (title, description, datetime, max_players, sport)
+VALUES
+    ('Turkey Bowl', 'Thanksgiving football game', 'November 15 16:20:55 2019 GMT', 10, 'football'),
+    ('Championship', 'Hockey game for who can make it', 'November 15 16:20:55 2019 GMT', 6, 'hockey'),
+    ('Dunk Fest', 'The premier pickup basketball game of the summer', 'November 15 16:20:55 2019 GMT', 8, 'basketball');
 
 INSERT INTO pug_user (username, password, first_name, last_name)
 VALUES
@@ -11,11 +18,19 @@ VALUES
     ('Beast Mode', 'seahawks', 'Marshawn', 'Lynch'),
     ('brady12', 'patriots', 'Tom', 'Brady');
 
-INSERT INTO pug_event (title, description, datetime, max_players, sport, host_id)
-VALUES
-    ('Turkey Bowl', 'Thanksgiving football game', 'November 15 16:20:55 2019 GMT', 10, 'football', 1),
-    ('Championship', 'Hockey game for who can make it', 'November 15 16:20:55 2019 GMT', 6, 'hockey', 2),
-    ('Dunk Fest', 'The premier pickup basketball game of the summer', 'November 15 16:20:55 2019 GMT', 8, 'basketball', 3);
+UPDATE pug_event SET host_id = 1 WHERE id = 1;
+UPDATE pug_event SET host_id = 2 WHERE id = 2;
+UPDATE pug_event SET host_id = 3 WHERE id = 3;
+
+INSERT INTO user_event (event_id, user_id)
+VALUES 
+    (1, 1),
+    (1, 2),
+    (2, 2),
+    (2, 3),
+    (3, 1),
+    (3, 2),
+    (3, 3);
 
 COMMIT;
 

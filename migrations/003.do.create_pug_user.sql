@@ -9,4 +9,4 @@ CREATE TABLE pug_user (
 ALTER TABLE pug_event
     ADD COLUMN
         host_id INTEGER REFERENCES pug_user(id) 
-        ON DELETE CASCADE NOT NULL;
+        ON DELETE CASCADE;
