@@ -11,7 +11,7 @@ eventRouter
         EventService.getAllEvents(req.app.get('db'))
             .then(events => {
                 //console.log(events);
-                res.json(events.map(EventService.serializeEvents))
+                res.json(EventService.serializeEvents(events))
             })
             .catch(next)
     })
@@ -60,7 +60,7 @@ eventRouter
             .catch(next)
     })
     .get((req, res, next) => {
-        res.json(EventService.serializeEvents(res.event))
+        res.json(EventService.serializeEvent(res.event))
     })
     .delete((req, res, next) => {
         EventService.deleteEvent(
