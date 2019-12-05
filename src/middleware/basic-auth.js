@@ -1,6 +1,7 @@
-function requireAuth(req, res, next) {
-    console.log(req.get('authorization'))
+const bcrypt = require('bcryptjs');
+const AuthService = require('../auth/auth-service');
 
+function requireAuth(req, res, next) {
     const authToken = req.get('authorization') || '';
     let bearerToken
 
@@ -10,16 +11,34 @@ function requireAuth(req, res, next) {
         bearerToken = authToken.slice('bearer '.length, authToken.length)
     }
 
-    const [tokenUsername, tokenPassword] = Buffer
-        .from(bearerToken, 'base64')
-        .toString()
-        .split(':')
+    const [tokenUsername, tokenPassword] = AuthService.parseBasicToken(bearerToken);
 
     if(!tokenUsername || !tokenPassword) {
         return res.status(401).json({error: 'Unauthorized request'})
     }
 
-    req.app.get('db')('pug_user')
+    AuthService.getUserWithUsername(
+        req.app.get('db'),
+        tokenUsername
+    )
+        .then(user => {
+            if(!user) {
+                return res.status(401).json({error:'Unauthorized request'})
+            }
+
+            return bcrypt.compare(tokenPassword, user.password)
+                .then(passwordsMatch => {
+                    if(!passwordsMatch) {
+                        return res.status(401).json({error: 'Unauthorized request'})
+                    }
+
+                    req.user = user
+                    next()
+                })
+        })
+        .catch(next)
+
+    /*req.app.get('db')('pug_user')
         .where({username: tokenUsername})
         .first()
         .then(user => {
@@ -30,7 +49,7 @@ function requireAuth(req, res, next) {
             req.user = user
             next()
         })
-        .catch(next)
+        .catch(next)*/
 }
 
 module.exports = {
