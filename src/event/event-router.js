@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const EventService = require('./event-service');
-const {requireAuth} = require('../middleware/basic-auth');
+const {requireAuth} = require('../middleware/jwt-auth');
 
 const eventRouter = express.Router();
 const jsonParser = express.json();
@@ -29,7 +29,7 @@ eventRouter
             }
         }
         newEvent.description = description;
-        newEvent.host_id = req.user.id;
+        newEvent.host_id = req.user_id;
 
         EventService.insertEvent(
             req.app.get('db'),
