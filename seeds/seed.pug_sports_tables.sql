@@ -14,9 +14,9 @@ VALUES
 
 INSERT INTO pug_user (username, password, first_name, last_name)
 VALUES
-    ('JDenver', 'jdenver', 'John', 'Denver'),
-    ('Beast Mode', 'seahawks', 'Marshawn', 'Lynch'),
-    ('brady12', 'patriots', 'Tom', 'Brady');
+    ('JDenver', '$2a$12$41JChQH2h/VVu.sAMwWwpOOjnXp1ypmE1QZuqqa9AjxyLl15Mkbzy', 'John', 'Denver'),
+    ('BeastMode', '$2a$12$V6NEsIOtTE12zA9gtBNufO3SuHYywU2g4JwAnfy.SBeXLNjzGvj9W', 'Marshawn', 'Lynch'),
+    ('brady12', '$2a$12$Bro2daZtepqKwJBKolSvE.F6h3XYYSQUAwFSPr9dMIRciIHtPSyC.', 'Tom', 'Brady');
 
 UPDATE pug_event SET host_id = 1 WHERE id = 1;
 UPDATE pug_event SET host_id = 2 WHERE id = 2;

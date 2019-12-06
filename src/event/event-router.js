@@ -1,12 +1,14 @@
 const path = require('path');
 const express = require('express');
 const EventService = require('./event-service');
+const {requireAuth} = require('../middleware/jwt-auth');
 
 const eventRouter = express.Router();
 const jsonParser = express.json();
 
 eventRouter
     .route('/')
+    .all(requireAuth)
     .get((req, res, next) => {
         EventService.getAllEvents(req.app.get('db'))
             .then(events => {
@@ -16,8 +18,8 @@ eventRouter
             .catch(next)
     })
     .post(jsonParser, (req, res, next) => {
-        const {title, sport, datetime, max_players, description, host_id} = req.body;
-        const newEvent = {title, sport, datetime, max_players, host_id};
+        const {title, sport, datetime, max_players, description} = req.body;
+        const newEvent = {title, sport, datetime, max_players};
 
         for(const [key, value] of Object.entries(newEvent)) {
             if(value == null) {
@@ -27,6 +29,7 @@ eventRouter
             }
         }
         newEvent.description = description;
+        newEvent.host_id = req.user_id;
 
         EventService.insertEvent(
             req.app.get('db'),
@@ -43,6 +46,7 @@ eventRouter
 
 eventRouter
     .route('/:event_id')
+    .all(requireAuth)
     .all((req, res, next) => {
         EventService.getById(
             req.app.get('db'),
