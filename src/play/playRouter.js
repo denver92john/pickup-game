@@ -22,16 +22,29 @@ playRouter
         newPlay.user_id = req.user_id
 
         console.log(newPlay)
-        PlayService.insertPlay(
+
+        PlayService.alreadyPlaying(
             req.app.get('db'),
-            newPlay
+            newPlay.user_id,
+            newPlay.event_id
         )
-            .then(play => {
-                res
-                    .status(201)
-                    .json(PlayService.serializePlay(play))
+            .then(alreadyPlaying => {
+                console.log(alreadyPlaying)
+                if(alreadyPlaying) {
+                    return res.status(400).json({error: `Already playing in this game`})
+                }
+                
+                PlayService.insertPlay(
+                    req.app.get('db'),
+                    newPlay
+                )
+                    .then(play => {
+                        res
+                            .status(201)
+                            .json(PlayService.serializePlay(play))
+                    })
+                    .catch(next)
             })
-            .catch(next)
     })
 
 module.exports = playRouter;

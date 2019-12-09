@@ -47,22 +47,7 @@ eventRouter
 eventRouter
     .route('/:event_id')
     .all(requireAuth)
-    .all((req, res, next) => {
-        EventService.getById(
-            req.app.get('db'),
-            req.params.event_id
-        )
-            .then(event => {
-                if(!event) {
-                    return res.status(404).json({
-                        error: {message: `Event doesn't exist`}
-                    })
-                }
-                res.event = event
-                next()
-            })
-            .catch(next)
-    })
+    .all(checkEventExists)
     .get((req, res, next) => {
         res.json(EventService.serializeEvent(res.event))
     })
@@ -97,5 +82,43 @@ eventRouter
             })
             .catch(next)
     })
+
+eventRouter
+    .route('/:event_id/players')
+    .all(requireAuth)
+    .all(checkEventExists)
+    .get((req, res, next) => {
+        EventService.getPlayers(
+            req.app.get('db'),
+            req.params.event_id
+        )
+            .then(players => {
+                console.log(players)
+                res
+                    .status(201)
+                    .json(EventService.serializePlayers(players))
+            })
+            .catch(next)
+    })
+
+
+async function checkEventExists(req, res, next) {
+    try {
+        const event = await EventService.getById(
+            req.app.get('db'),
+            req.params.event_id
+        )
+
+        if(!event) {
+            return res.status(404).json({
+                error: {message: `Event doesn't exist`}
+            })
+        }
+        res.event = event
+        next()
+    } catch (error) {
+        next(error)
+    }
+}
 
 module.exports = eventRouter;

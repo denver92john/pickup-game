@@ -23,6 +23,15 @@ const PlayService = {
             .where('play.id', id)
             .first()
     },
+    alreadyPlaying(db, user_id, event_id) {
+        return db('user_event')
+            .where({
+                user_id,
+                event_id
+            })
+            .first()
+            .then(play => !!play)
+    },
     insertPlay(db, newPlay) {
         return db
             .insert(newPlay)

@@ -14,21 +14,13 @@ const EventService = {
                 'event.sport',
                 ...hostFields,
                 db.raw(
-                    `count(DISTINCT user_event) AS number_of_players`
-                ),
-                /*db.raw(
-                    `json_build_object(
-                        'id', usr.id,
-                        'username', usr.username,
-                        'first_name', usr.first_name,
-                        'last_name', usr.last_name
-                    ) AS "host"`
-                ),*/
+                    `count(DISTINCT play) AS number_of_players`
+                )
             )
             .leftJoin(
-                'user_event',
+                'user_event AS play',
                 'event.id',
-                'user_event.event_id'
+                'play.event_id'
             )
             .leftJoin(
                 'pug_user AS usr',
@@ -45,7 +37,26 @@ const EventService = {
             .first()
     },
 
-    //getPlayers(db, id) {},
+    getPlayers(db, event_id) {
+        return db
+            .from('user_event AS play')
+            .select(
+                'play.id',
+                ...playerFields,
+                ...eventFields
+            )
+            .leftJoin(
+                'pug_event AS event',
+                'play.event_id',
+                'event.id'
+            )
+            .leftJoin(
+                'pug_user AS usr',
+                'play.user_id',
+                'usr.id'
+            )
+            .where('play.event_id', event_id)
+    },
 
     insertEvent(db, newEvent) {
         return db
@@ -104,6 +115,22 @@ const EventService = {
             }
         }*/
     },
+
+    serializePlayers(players) {
+        return players.map(this.serializePlayer)
+    },
+
+    serializePlayer(player) {
+        const playTree = new Treeize();
+        const playData = playTree.grow([player]).getData()[0];
+        return {
+            id: playData.id,
+            player: playData.player,
+            event: playData.event
+        }
+    },
+
+     
 }
 
 const hostFields = [
@@ -111,6 +138,16 @@ const hostFields = [
     'usr.username AS host:username',
     'usr.first_name AS host:first_name',
     'usr.last_name AS host:last_name',
+]
+
+const playerFields = [
+    'usr.id AS player:id',
+    'usr.username AS player:username'
+]
+
+const eventFields = [
+    'event.id AS event:id',
+    'event.title AS event:title'
 ]
 
 module.exports = EventService;
