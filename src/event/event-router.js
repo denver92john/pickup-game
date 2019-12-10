@@ -96,7 +96,8 @@ eventRouter
                 console.log(players)
                 res
                     .status(201)
-                    .json(EventService.serializePlayers(players))
+                    //.json(EventService.serializePlayers(players))
+                    .json(players)
             })
             .catch(next)
     })

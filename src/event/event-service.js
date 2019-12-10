@@ -13,6 +13,7 @@ const EventService = {
                 'event.max_players',
                 'event.sport',
                 ...hostFields,
+                //...playerFields,
                 db.raw(
                     `count(DISTINCT play) AS number_of_players`
                 )
@@ -41,15 +42,16 @@ const EventService = {
         return db
             .from('user_event AS play')
             .select(
-                'play.id',
-                ...playerFields,
-                ...eventFields
+                //...playerFields,
+                //...eventFields
+                'usr.id',
+                'usr.username'
             )
-            .leftJoin(
+            /*.leftJoin(
                 'pug_event AS event',
                 'play.event_id',
                 'event.id'
-            )
+            )*/
             .leftJoin(
                 'pug_user AS usr',
                 'play.user_id',
@@ -97,6 +99,7 @@ const EventService = {
             sport: eventData.sport,
             number_of_players: eventData.number_of_players,
             host: eventData.host || {},
+            //players: eventData.players || {},
         }
         /*const {host} = events;
         return {
@@ -121,13 +124,13 @@ const EventService = {
     },
 
     serializePlayer(player) {
-        const playTree = new Treeize();
+        /*const playTree = new Treeize();
         const playData = playTree.grow([player]).getData()[0];
         return {
             id: playData.id,
-            player: playData.player,
+            players: playData.players,
             event: playData.event
-        }
+        }*/
     },
 
      
@@ -141,8 +144,8 @@ const hostFields = [
 ]
 
 const playerFields = [
-    'usr.id AS player:id',
-    'usr.username AS player:username'
+    'usr.id AS players:id',
+    'usr.username AS players:username'
 ]
 
 const eventFields = [
