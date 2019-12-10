@@ -1,9 +1,22 @@
 const express = require('express');
 const path = require('path');
 const UserService = require('./user-service');
+const {requireAuth} = require('../middleware/jwt-auth');
 
 const userRouter = express.Router();
 const jsonParser = express.json();
+
+userRouter
+    .get('/', requireAuth, (req, res, next) => {
+        UserService.getUserById(
+            req.app.get('db'),
+            req.user_id
+        )
+            .then(userData => {
+                res.json(UserService.serializeUser(userData))
+            })
+            .catch(next)
+    })
 
 userRouter
     .post('/', jsonParser, (req, res, next) => {
