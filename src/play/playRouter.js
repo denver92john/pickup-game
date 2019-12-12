@@ -187,4 +187,35 @@ playRouter
     }
 }*/
 
+playRouter
+    .route('/user/:user_id')
+    .all(requireAuth)
+    .get((req, res, next) => {
+        PlayService.getByUser(
+            req.app.get('db'),
+            req.params.user_id
+        )
+            .then(userGames => {
+                console.log(userGames)
+                res.json(userGames)
+            })
+            .catch(next)
+    })
+
+playRouter
+    .route('/host/:user_id')
+    .all(requireAuth)
+    .get((req, res, next) => {
+        PlayService.getUserHostedEvents(
+            req.app.get('db'),
+            req.params.user_id
+        )
+            .then(hostedGames => {
+                console.log(hostedGames)
+                res.json(hostedGames)
+            })
+            .catch(next)
+    })
+
+
 module.exports = playRouter;

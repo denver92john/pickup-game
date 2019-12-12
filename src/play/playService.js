@@ -23,6 +23,23 @@ const PlayService = {
             .where('play.id', id)
             .first()
     },
+    getByUser(db, user_id) {
+        return db
+            .from('user_event AS play')
+            .select(
+                'event.id',
+                'event.title',
+                'event.datetime',
+                'event.sport',
+                'event.host_id'
+            )
+            .leftJoin(
+                'pug_event AS event',
+                'play.event_id',
+                'event.id'
+            )
+            .where('play.user_id', user_id)
+    },
     getByUserAndEvent(db, user_id, event_id) {
         return db
             .from('user_event AS play')
@@ -46,6 +63,18 @@ const PlayService = {
                 'play.event_id': event_id
             })
             .first()
+    },
+    getUserHostedEvents(db, user_id) {
+        return db
+            .from('pug_event AS event')
+            .select(
+                'event.id',
+                'event.title',
+                'event.datetime',
+                'event.sport',
+                'event.host_id'
+            )
+            .where('event.host_id', user_id)
     },
     alreadyPlaying(db, alreadyPlay /*user_id, event_id*/) {
         return db('user_event')
