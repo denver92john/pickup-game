@@ -44,6 +44,17 @@ eventRouter
             .catch(next)
     })
 
+// cant be after '/:event_id' route
+eventRouter
+    .get('/sport_list', requireAuth, (req, res, next) => {
+        EventService.getSportsList(req.app.get('db'))
+            .then(sportsList => {
+                console.log(sportsList)
+                res.json(sportsList)
+            })
+            .catch(next)
+    })
+
 eventRouter
     .route('/:event_id')
     .all(requireAuth)
@@ -115,7 +126,9 @@ async function checkEventExists(req, res, next) {
                 error: {message: `Event doesn't exist`}
             })
         }
+        event.player_id = req.user_id
         res.event = event
+        console.log(res.event)
         next()
     } catch (error) {
         next(error)

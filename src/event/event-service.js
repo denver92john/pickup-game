@@ -60,6 +60,17 @@ const EventService = {
             .where('play.event_id', event_id)
     },
 
+    getSportsList(db) {
+        return db
+            .from('pug_event')
+            .select(
+                db.raw(
+                    `enum_range(NULL::sport_type)`
+                )
+            )
+            .first()
+    },
+
     insertEvent(db, newEvent) {
         return db
             .insert(newEvent)
@@ -99,6 +110,7 @@ const EventService = {
             sport: eventData.sport,
             number_of_players: eventData.number_of_players,
             host: eventData.host || {},
+            player_id: eventData.player_id || '',
             //players: eventData.players || {},
         }
         /*const {host} = events;

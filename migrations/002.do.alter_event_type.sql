@@ -1,7 +1,12 @@
 CREATE TYPE sport_type AS ENUM (
     'basketball',
     'football',
-    'hockey'
+    'hockey',
+    'volleyball',
+    'walleyball',
+    'biking',
+    'weight lifting',
+    'hiking'
 );
 
 ALTER TABLE pug_event
