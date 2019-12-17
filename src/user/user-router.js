@@ -20,7 +20,13 @@ userRouter
 
 userRouter
     .post('/', jsonParser, (req, res, next) => {
-        const {username, password, first_name, last_name} = req.body;
+        const {username, password, reenter_password, first_name, last_name} = req.body;
+
+        if(password !== reenter_password) {
+            return res.status(400).json({
+                error: `Passwords don't match`
+            })
+        }
 
         for(const field of ['username', 'password']) {
             if(!req.body[field]) {
