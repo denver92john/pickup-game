@@ -12,7 +12,6 @@ eventRouter
     .get((req, res, next) => {
         EventService.getAllEvents(req.app.get('db'))
             .then(events => {
-                //console.log(events);
                 res.json(EventService.serializeEvents(events))
             })
             .catch(next)
@@ -49,7 +48,6 @@ eventRouter
     .get('/sport_list', requireAuth, (req, res, next) => {
         EventService.getSportsList(req.app.get('db'))
             .then(sportsList => {
-                console.log(sportsList)
                 res.json(sportsList)
             })
             .catch(next)
@@ -104,7 +102,6 @@ eventRouter
             req.params.event_id
         )
             .then(players => {
-                console.log(players)
                 res
                     .status(201)
                     //.json(EventService.serializePlayers(players))
@@ -128,7 +125,6 @@ async function checkEventExists(req, res, next) {
         }
         event.player_id = req.user_id
         res.event = event
-        console.log(res.event)
         next()
     } catch (error) {
         next(error)

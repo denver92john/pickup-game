@@ -27,15 +27,12 @@ playRouter
 
         newPlay.user_id = req.user_id
 
-        console.log(newPlay)
-
         PlayService.alreadyPlaying(
             req.app.get('db'),
             newPlay.user_id,
             newPlay.event_id
         )
             .then(alreadyPlaying => {
-                console.log(alreadyPlaying)
                 if(alreadyPlaying) {
                     return res.status(400).json({error: `Already playing in this game`})
                 }
@@ -57,8 +54,6 @@ playRouter
         const deletePlay = {event_id};
 
         deletePlay.user_id = req.user_id
-
-        console.log(deletePlay)
 
         PlayService.deletePlay(
             req.app.get('db'),
@@ -83,10 +78,8 @@ playRouter
             .then(checkedPlay => {
                 
                 if(!checkedPlay) {
-                    console.log(checkedPlay)
                     res.status(204).end()
                 } else {
-                    console.log(checkedPlay)
                     res.send('signed up to play')
                 }
             })
@@ -127,7 +120,6 @@ playRouter
             newPlay
         )
             .then(alreadyPlaying => {
-                //console.log(alreadyPlaying)
                 if(alreadyPlaying) {
                     return res.status(400).json({error: `Already playing in this game`})
                     //res.send('Already playing in this game')
@@ -154,7 +146,6 @@ playRouter
             deletePlay
         )
             .then(alreadyPlaying => {
-                console.log(alreadyPlaying);
                 if(!alreadyPlaying) {
                     return res.status(400).json({error: `Not yet playing in this game`})
                     //return res.send('Not yet playing in this game')
@@ -196,7 +187,6 @@ playRouter
             req.params.user_id
         )
             .then(userGames => {
-                console.log(userGames)
                 res.json(userGames)
             })
             .catch(next)
@@ -211,7 +201,6 @@ playRouter
             req.params.user_id
         )
             .then(hostedGames => {
-                console.log(hostedGames)
                 res.json(hostedGames)
             })
             .catch(next)

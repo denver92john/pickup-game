@@ -41,7 +41,6 @@ function requireAuth(req, res, next) {
         .where({username: tokenUsername})
         .first()
         .then(user => {
-            //console.log(user)
             if(!user || user.password !== tokenPassword) {
                 return res.status(401).json({error: 'Unauthorized request'})
             }
