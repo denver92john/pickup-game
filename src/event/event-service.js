@@ -13,7 +13,6 @@ const EventService = {
                 'event.max_players',
                 'event.sport',
                 ...hostFields,
-                //...playerFields,
                 db.raw(
                     `count(DISTINCT play) AS number_of_players`
                 )
@@ -42,16 +41,9 @@ const EventService = {
         return db
             .from('user_event AS play')
             .select(
-                //...playerFields,
-                //...eventFields
                 'usr.id',
                 'usr.username'
             )
-            /*.leftJoin(
-                'pug_event AS event',
-                'play.event_id',
-                'event.id'
-            )*/
             .leftJoin(
                 'pug_user AS usr',
                 'play.user_id',

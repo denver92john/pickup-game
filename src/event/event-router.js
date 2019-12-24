@@ -103,7 +103,7 @@ eventRouter
         )
             .then(players => {
                 res
-                    .status(201)
+                    //.status(201)
                     //.json(EventService.serializePlayers(players))
                     .json(players)
             })

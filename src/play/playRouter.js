@@ -5,7 +5,7 @@ const {requireAuth} = require('../middleware/jwt-auth');
 const playRouter = express.Router();
 const jsonBodyParser = express.json();
 
-playRouter
+/*playRouter
     .route('/')
     .post(requireAuth, jsonBodyParser, (req, res, next) => {
         const {event_id, max_players, number_of_players} = req.body;
@@ -48,22 +48,6 @@ playRouter
                     })
                     .catch(next)
             })
-    })
-    /*.delete((req, res, next) => {
-        const {event_id} = req.body;
-        const deletePlay = {event_id};
-
-        deletePlay.user_id = req.user_id
-
-        PlayService.deletePlay(
-            req.app.get('db'),
-            deletePlay.user_id,
-            deletePlay.event_id
-        )
-            .then(() => {
-                res.status(204).end()
-            })
-            .catch(next)
     })*/
 
 playRouter
@@ -84,17 +68,6 @@ playRouter
                 }
             })
             .catch(next)
-        /*PlayService.getByUserAndEvent(
-            req.app.get('db'),
-            req.user_id,
-            req.params.event_id
-        )
-            .then(resData => {
-                res
-                    .status(201)
-                    .json(PlayService.serializePlay(resData))
-            })
-            .catch(next)*/
     })
     .post(jsonBodyParser, (req, res, next) => {
         const {max_players, number_of_players} = req.body;
@@ -161,22 +134,6 @@ playRouter
                     .catch(next)
             })
     })
-
-/*async function checkIfPlaying(req, res, next) {
-    try {
-        const playing = await PlayService.checkAlreadyPlaying(
-            req.app.get('db'),
-            req.user_id,
-            req.params.event_id
-        )
-
-        if(playing) {
-            return res.status(400).json({error: `Already playing in this game`})
-        } 
-    } catch(error) {
-        next(error)
-    }
-}*/
 
 playRouter
     .route('/user/:user_id')
