@@ -40,30 +40,6 @@ const PlayService = {
             )
             .where('play.user_id', user_id)
     },
-    getByUserAndEvent(db, user_id, event_id) {
-        return db
-            .from('user_event AS play')
-            .select(
-                'play.id',
-                ...eventFields,
-                ...userFields,
-            )
-            .leftJoin(
-                'pug_event AS event',
-                'play.event_id',
-                'event.id'
-            )
-            .leftJoin(
-                'pug_user AS usr',
-                'play.user_id',
-                'usr.id'
-            )
-            .where({
-                'play.user_id': user_id,
-                'play.event_id': event_id
-            })
-            .first()
-    },
     getUserHostedEvents(db, user_id) {
         return db
             .from('pug_event AS event')
@@ -76,12 +52,8 @@ const PlayService = {
             )
             .where('event.host_id', user_id)
     },
-    alreadyPlaying(db, alreadyPlay /*user_id, event_id*/) {
+    alreadyPlaying(db, alreadyPlay) {
         return db('user_event')
-            /*.where({
-                user_id,
-                event_id
-            })*/
             .where(alreadyPlay)
             .first()
             .then(play => !!play)
@@ -104,16 +76,6 @@ const PlayService = {
             })*/
             .where(deletePlay)
             .delete()
-    },
-    serializePlay(play) {
-        const playTree = new Treeize();
-        const playData = playTree.grow([play]).getData()[0];
-
-        return {
-            id: playData.id,
-            event: playData.event || {},
-            user: playData.user || {},
-        }
     },
 }
 

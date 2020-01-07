@@ -60,37 +60,6 @@ eventRouter
     .get((req, res, next) => {
         res.json(EventService.serializeEvent(res.event))
     })
-    .delete((req, res, next) => {
-        EventService.deleteEvent(
-            req.app.get('db'),
-            req.params.event_id
-        )
-            .then(() => {
-                res.status(204).end()
-            })
-            .catch(next)
-    })
-    .patch(jsonParser, (req, res, next) => {
-        const {title, sport, datetime, max_players, description, host_id} = req.body;
-        const eventToUpdate = {title, sport, datetime, max_players, description, host_id};
-        const numberOfValues = Object.values(eventToUpdate).filter(Boolean).length;
-
-        if(numberOfValues === 0) {
-            return res.status(400).json({
-                error: {message: `Request body must contain must update one of the fields`}
-            })
-        }
-
-        EventService.updateEvent(
-            req.app.get('db'),
-            req.params.event_id,
-            eventToUpdate
-        )
-            .then(() => {
-                res.status(204).end()
-            })
-            .catch(next)
-    })
 
 eventRouter
     .route('/:event_id/players')
@@ -102,10 +71,7 @@ eventRouter
             req.params.event_id
         )
             .then(players => {
-                res
-                    //.status(201)
-                    //.json(EventService.serializePlayers(players))
-                    .json(players)
+                res.json(players)
             })
             .catch(next)
     })

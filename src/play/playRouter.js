@@ -5,51 +5,6 @@ const {requireAuth} = require('../middleware/jwt-auth');
 const playRouter = express.Router();
 const jsonBodyParser = express.json();
 
-/*playRouter
-    .route('/')
-    .post(requireAuth, jsonBodyParser, (req, res, next) => {
-        const {event_id, max_players, number_of_players} = req.body;
-        const newPlay = {event_id};
-
-        if(number_of_players >= max_players) {
-            return res.status(400).json({
-                error: `Game is full`
-            })
-        }
-
-        for(const [key, value] of Object.entries(newPlay)) {
-            if(value == null) {
-                return res.status(400).json({
-                    error: `Missing '${key}' in request body`
-                })
-            }
-        }
-
-        newPlay.user_id = req.user_id
-
-        PlayService.alreadyPlaying(
-            req.app.get('db'),
-            newPlay.user_id,
-            newPlay.event_id
-        )
-            .then(alreadyPlaying => {
-                if(alreadyPlaying) {
-                    return res.status(400).json({error: `Already playing in this game`})
-                }
-                
-                PlayService.insertPlay(
-                    req.app.get('db'),
-                    newPlay
-                )
-                    .then(play => {
-                        res
-                            .status(201)
-                            .json(PlayService.serializePlay(play))
-                    })
-                    .catch(next)
-            })
-    })*/
-
 playRouter
     .route('/:event_id')
     .all(requireAuth)

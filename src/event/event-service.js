@@ -73,18 +73,6 @@ const EventService = {
             })
     },
 
-    deleteEvent(db, id) {
-        return db('pug_event')
-            .where({id})
-            .delete()
-    },
-
-    updateEvent(db, id, newEventFields) {
-        return db('pug_event')
-            .where({id})
-            .update(newEventFields)
-    },
-
     serializeEvents(events) {
         return events.map(this.serializeEvent)
     },
@@ -103,41 +91,8 @@ const EventService = {
             number_of_players: eventData.number_of_players,
             host: eventData.host || {},
             player_id: eventData.player_id || '',
-            //players: eventData.players || {},
         }
-        /*const {host} = events;
-        return {
-            id: events.id,
-            title: events.title,
-            description: events.description,
-            datetime: events.datetime,
-            max_players: events.max_players,
-            sport: events.sport,
-            number_of_players: Number(events.number_of_players),
-            host: {
-                id: host.id,
-                username: host.username,
-                first_name: host.first_name,
-                last_name: host.last_name
-            }
-        }*/
     },
-
-    serializePlayers(players) {
-        return players.map(this.serializePlayer)
-    },
-
-    serializePlayer(player) {
-        /*const playTree = new Treeize();
-        const playData = playTree.grow([player]).getData()[0];
-        return {
-            id: playData.id,
-            players: playData.players,
-            event: playData.event
-        }*/
-    },
-
-     
 }
 
 const hostFields = [
@@ -145,16 +100,6 @@ const hostFields = [
     'usr.username AS host:username',
     'usr.first_name AS host:first_name',
     'usr.last_name AS host:last_name',
-]
-
-const playerFields = [
-    'usr.id AS players:id',
-    'usr.username AS players:username'
-]
-
-const eventFields = [
-    'event.id AS event:id',
-    'event.title AS event:title'
 ]
 
 module.exports = EventService;
