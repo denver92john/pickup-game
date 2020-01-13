@@ -28,7 +28,6 @@ const EventService = {
                 'usr.id'
             )
             .groupBy('event.id', 'usr.id')
-            //.orderBy('event.id', 'usr.id')
     },
 
     getById(db, id) {
